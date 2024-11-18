@@ -1,9 +1,12 @@
 from PIL import Image
 import sys, os
-def image_to_ascii(name,format,end):
+def image_to_ascii(name,format,end,scale):
     im = Image.open(f"./photos/{name}.{format}")
     width,height = im.size
+    im.resize((width//scale,height//scale)).save(f"new.{format}")
 
+    im = Image.open(f"new.jpg")
+    width,height = im.size
     pix_value =list(im.getdata())
     grid = []
     for z in range(height):
@@ -34,7 +37,7 @@ def image_to_ascii(name,format,end):
             else:
                 grid[y][x] = " "
 
-    file = open(f"{end}.txt","w")
+    file = open(f"./result/{end}.txt","w")
 
     for row in grid:
         file.write("".join(row)+ "\n")
@@ -42,10 +45,10 @@ def image_to_ascii(name,format,end):
     file.close()
 
 
-    print(sys.argv)
+
 
 name = input("Напишите название картинки которую вы хотите конвертировать в ascii: \n")
 format = input("Формат фото: \n")
 end = input("Под каким названием сохранить фото? ")
 
-image_to_ascii(name,format,end)
+image_to_ascii(name,format,end,3)
